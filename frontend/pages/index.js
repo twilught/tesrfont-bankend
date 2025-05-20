@@ -21,7 +21,7 @@ export default function Home() {
 
     return (
         <div>
-            <h1>Next.js Frontend</h1>
+            <h1>มายรักก้อง</h1>
             <p>{message}</p>
         </div>
     );
