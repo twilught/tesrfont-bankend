@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 
+// 🌍 log ตอน build time (ฝังลงใน JS bundle ตอน build)
+console.log('🌍 ENV at build:', process.env.NEXT_PUBLIC_API_URL);
+
 export default function Home() {
     const [message, setMessage] = useState('');
 
     useEffect(() => {
         const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/hello`;
-        console.log('📡 Fetching from:', apiUrl); // ดูว่า env อ่านได้ไหม
+        console.log('🌐 Fetching from:', apiUrl); // log ตอน runtime บน browser
 
         fetch(apiUrl)
             .then((res) => res.json())
