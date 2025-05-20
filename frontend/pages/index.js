@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-// 🌍 log ตอน build time (ฝังลงใน JS bundle ตอน build)
+// 🌍 log ตอน build-time (ฝังลงใน JS bundle)
 console.log('🌍 ENV at build:', process.env.NEXT_PUBLIC_API_URL);
 
 export default function Home() {
@@ -8,7 +8,7 @@ export default function Home() {
 
     useEffect(() => {
         const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/hello`;
-        console.log('🌐 Fetching from:', apiUrl); // log ตอน runtime บน browser
+        console.log('🌐 Fetching from:', apiUrl); // ✅ log ตอน runtime (บน browser)
 
         fetch(apiUrl)
             .then((res) => res.json())
