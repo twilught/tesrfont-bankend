@@ -5,7 +5,7 @@ export default function Home() {
 
     useEffect(() => {
         // ใช้ URL จาก .env.local
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/hello`;
+        const apiUrl = `https://express-backend-xdol.onrender.com/api/hello`;
 
         fetch(apiUrl)
             .then((res) => res.json())
