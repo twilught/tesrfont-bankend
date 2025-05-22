@@ -7,6 +7,12 @@ const Note = require('./models/Note');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+
+// ✅ Allow frontend domain
+app.use(cors({
+    origin: 'https://tesrfont-bankend.onrender.com', // ใส่ URL frontend จริงของคุณ
+}));
+
 // ✅ Middleware
 app.use(cors());
 app.use(express.json());
