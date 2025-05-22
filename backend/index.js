@@ -1,50 +1,50 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const cors = require('cors');
-const { v4: uuidv4 } = require('uuid');
+require('dotenv').config(); // โหลด .env
+const Note = require('./models/Note');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+// ✅ Middleware
 app.use(cors());
 app.use(express.json());
 
-// 📝 In-memory storage
-let notes = [];
+// ✅ เชื่อม MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log('✅ Connected to MongoDB'))
+    .catch(err => console.error('❌ MongoDB connection error:', err));
 
-// ✅ [GET] Get all notes
-app.get('/api/notes', (req, res) => {
+// ✅ API Routes
+app.get('/api/notes', async (req, res) => {
+    const notes = await Note.find();
     res.json(notes);
 });
 
-// ✅ [POST] Create new note
-app.post('/api/notes', (req, res) => {
+app.post('/api/notes', async (req, res) => {
     const { text } = req.body;
-    const newNote = { id: uuidv4(), text };
-    notes.push(newNote);
-    res.status(201).json(newNote);
+    const note = new Note({ text });
+    await note.save();
+    res.status(201).json(note);
 });
 
-// ✅ [DELETE] Delete note by id
-app.delete('/api/notes/:id', (req, res) => {
-    const { id } = req.params;
-    notes = notes.filter(note => note.id !== id);
+app.delete('/api/notes/:id', async (req, res) => {
+    await Note.findByIdAndDelete(req.params.id);
     res.status(204).end();
 });
 
-// ✅ [PUT] Update note by id (optional)
-app.put('/api/notes/:id', (req, res) => {
-    const { id } = req.params;
+app.put('/api/notes/:id', async (req, res) => {
     const { text } = req.body;
-    const note = notes.find(n => n.id === id);
-    if (!note) return res.status(404).json({ error: 'Note not found' });
-    note.text = text;
-    res.json(note);
+    const updated = await Note.findByIdAndUpdate(req.params.id, { text }, { new: true });
+    res.json(updated);
 });
 
+// (optional) ทดสอบ root
 app.get('/', (req, res) => {
-    res.send('Backend is running');
+    res.send('🟢 Backend is running');
 });
 
 app.listen(PORT, () => {
-    console.log(`✅ Backend running at http://localhost:${PORT}`);
+    console.log(`✅ Server running on port ${PORT}`);
 });
